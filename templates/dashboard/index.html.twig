@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <div class="dashboard" style="background-color: #1E1E1E;">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar on the left, 25% width -->
+                <aside class="col-md-3 col-lg-2" style="background-color: #111111; min-height: 100vh;">
+                    {% include 'dashboard/sidebar.html.twig' %}
+                </aside>
+
+                <!-- Main content area, 75% width -->
+                <div class="col-md-9 col-lg-10 text-white">
+                    <!-- Header at the top of the main content area -->
+                    {% include 'dashboard/header.html.twig' %}
+
+                    <!-- Content area for dynamic content -->
+                    <main style="padding: 1.5rem;">
+                        {% block content %}
+                            {% include 'dashboard/content.html.twig' %}
+                        {% endblock %}
+                    </main>
+
+                    <!-- Footer at the bottom of the main content area -->
+                    {% include 'dashboard/footer.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

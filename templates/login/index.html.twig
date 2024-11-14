@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        background-color: #ffffff; /* Sets the background to white for this page */
+    }
+</style>
+
+<!-- Background Video -->
+<video autoplay muted loop class="position-fixed w-100 h-100" style="z-index: -1; object-fit: cover;">
+    <source src="{{ asset('Newback.mp4') }}" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
+
+<!-- Login Form -->
+<div class="container d-flex justify-content-center align-items-center vh-100 ">
+    <div class="ard p-4 bg-dark bg-opacity-75 text-white form-container shadow-lg rounded-3">
+        <h2 class="text-center mb-4">Login</h2>
+
+        <!-- Display error message if any -->
+        {% if error is defined %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <!-- Login Form -->
+        <form action="{{ path('simple_login_form') }}" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Username</label>
+                <input type="text" name="name" id="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <p class="text-center mt-3">Don't have an account?  </p>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
