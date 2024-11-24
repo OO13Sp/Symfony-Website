@@ -18,4 +18,5 @@ class MovieController extends AbstractController
             'stupid' => 'damn'
         ]);
     }
+    #This controller was made to see the URL change 
 }

@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Demo;
+use App\Entity\Dummy2;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Demo>
+ * @extends ServiceEntityRepository<Dummy2>
  */
-class DemoRepository extends ServiceEntityRepository
+class Dummy2Repository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Demo::class);
+        parent::__construct($registry, Dummy2::class);
     }
 
 //    /**
-//     * @return Demo[] Returns an array of Demo objects
+//     * @return Dummy2[] Returns an array of Dummy2 objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -31,7 +31,7 @@ class DemoRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Demo
+//    public function findOneBySomeField($value): ?Dummy2
 //    {
 //        return $this->createQueryBuilder('d')
 //            ->andWhere('d.exampleField = :val')

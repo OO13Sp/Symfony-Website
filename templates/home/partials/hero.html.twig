@@ -1,0 +1,91 @@
+<header class="position-relative" style="background-image: url('https://images.pexels.com/photos/276528/pexels-photo-276528.jpeg?cs=srgb&dl=pexels-pixabay-276528.jpg&fm=jpg'); background-size: cover; height: 100vh;">
+    <!-- Overlay for better text contrast -->
+    <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark container-fluid px-4 pt-3">
+        <div class="d-flex align-items-center">
+            <img src="/Logo.png" alt="Furniture Mania Logo" style="height: 80px; margin-right: 10px;">
+            <h1 class="navbar-brand mb-0"></h1>
+        </div>
+
+        <!-- Navigation Links inside a Pill -->
+       <div class="position-fixed top-0 start-50 translate-middle-x " style="z-index: 1030;">
+    <ul class="nav nav-pills rounded-pill p-3 justify-content-center" style="background-color: rgb(46, 48, 51);">
+        <li class="nav-item">
+            <a class="nav-link text-white active" style="background-color: rgba(255, 255, 255, 0.15)" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#">Products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#">Pages</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#">Contact Us</a>
+        </li>
+    </ul>
+</div>
+
+
+        <!-- Purchase Now Button -->
+       <!-- Include Font Awesome (if it's not already included in your project) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<div>
+    <!-- Button with Arrow and Circle -->
+    <a href="purchase.html" class="btn text-white d-flex align-items-center " style="background-color: rgb(46 48 51)">
+        <span>Purchase Now</span>
+        <!-- Arrow Circle -->
+        <span class="arrow-circle d-flex justify-content-center align-items-center ms-2">
+            <i class="fas fa-arrow-right" style="color: black;"></i>
+        </span>
+    </a>
+</div>
+
+<!-- Additional CSS for Circle, Hover Effect, and Transition -->
+<style>
+    .arrow-circle {
+        width: 25px; /* Circle width */
+        height: 25px; /* Circle height */
+        border-radius: 50%; /* Make the span circular */
+        background-color:rgb(46 48 51) ; /* Initial circle color */
+        transition: background-color 2s ease, transform 0.01s ease; /* Smooth color and movement transition */
+    }
+
+    .arrow-circle i {
+        font-size: 15px; /* Arrow size */
+        color: white; /* Initial arrow color */
+    }
+
+    .btn:hover .arrow-circle {
+        background-color: white; /* Circle turns white on hover */
+    }
+
+    .btn:hover .arrow-circle i {
+        color: black; /* Arrow turns black on hover */
+        transform: translateX(5px); /* Move the arrow to the right on hover */
+       transition:  transform 2s  ease;
+    }
+
+    .btn:hover{
+        background-color: white; /* Button turns darker on hover */
+        /* Smooth color, text, shadow, and scaling transition */
+    }
+
+    
+</style>
+
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+        <h1 class="display-3 font-weight-bold">Welcome to Furniture Mania</h1>
+        <p class="lead mt-3">Your Dreams, Our Responsibilities.</p>
+
+
+        
+    </div>
+
+    
+</header>
