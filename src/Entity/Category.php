@@ -16,26 +16,22 @@ class Category
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $Name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Type = null;
+    private ?string $Description = null;
 
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'Category', orphanRemoval: true)]
-    private Collection $Products;
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'Categories')]
+    private Collection $Product_Type;
 
     public function __construct()
     {
-        $this->Products = new ArrayCollection();
+        $this->Product_Type = new ArrayCollection();
     }
 
-    /**
-    
-     */
- 
     public function getId(): ?int
     {
         return $this->id;
@@ -43,24 +39,24 @@ class Category
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->Name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $Name): static
     {
-        $this->name = $name;
+        $this->Name = $Name;
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function getDescription(): ?string
     {
-        return $this->Type;
+        return $this->Description;
     }
 
-    public function setType(string $Type): static
+    public function setDescription(string $Description): static
     {
-        $this->Type = $Type;
+        $this->Description = $Description;
 
         return $this;
     }
@@ -68,32 +64,24 @@ class Category
     /**
      * @return Collection<int, Product>
      */
-    public function getProducts(): Collection
+    public function getProductType(): Collection
     {
-        return $this->Products;
+        return $this->Product_Type;
     }
 
-    public function addProduct(Product $product): static
+    public function addProductType(Product $productType): static
     {
-        if (!$this->Products->contains($product)) {
-            $this->Products->add($product);
-            $product->setCategory($this);
+        if (!$this->Product_Type->contains($productType)) {
+            $this->Product_Type->add($productType);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeProductType(Product $productType): static
     {
-        if ($this->Products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
-            }
-        }
+        $this->Product_Type->removeElement($productType);
 
         return $this;
     }
-
- 
 }

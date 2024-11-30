@@ -17,45 +17,36 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $total_price = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $created_at = null;
+    private ?\DateTimeInterface $Created_at = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updated_at = null;
+    #[ORM\Column(length: 255)]
+    private ?string $status = null;
 
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\ManyToMany(targetEntity: Product::class)]
-    private Collection $products;
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'Product_Orders')]
+    private Collection $Products_Order;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->Products_Order = new ArrayCollection();
     }
-
-    #[ORM\Column(length: 255)]
-    
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTotalPrice(): ?string
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->total_price;
+        return $this->Created_at;
     }
 
-    public function setTotalPrice(string $total_price): static
+    public function setCreatedAt(\DateTimeInterface $Created_at): static
     {
-        $this->total_price = $total_price;
+        $this->Created_at = $Created_at;
 
         return $this;
     }
@@ -65,33 +56,9 @@ class Order
         return $this->status;
     }
 
-    public function setStatus(?string $status): static
+    public function setStatus(string $status): static
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updated_at;
-    }
-
-    public function setUpdatedAt(?\DateTimeInterface $updated_at): static
-    {
-        $this->updated_at = $updated_at;
 
         return $this;
     }
@@ -99,26 +66,30 @@ class Order
     /**
      * @return Collection<int, Product>
      */
-    public function getProducts(): Collection
+    public function getProductsOrder(): Collection
     {
-        return $this->products;
+        return $this->Products_Order;
     }
 
-    public function addProduct(Product $product): static
+    public function addProductsOrder(Product $productsOrder): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
+        if (!$this->Products_Order->contains($productsOrder)) {
+            $this->Products_Order->add($productsOrder);
+            $productsOrder->setProductOrders($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): static
+    public function removeProductsOrder(Product $productsOrder): static
     {
-        $this->products->removeElement($product);
+        if ($this->Products_Order->removeElement($productsOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productsOrder->getProductOrders() === $this) {
+                $productsOrder->setProductOrders(null);
+            }
+        }
 
         return $this;
     }
-
-    
 }

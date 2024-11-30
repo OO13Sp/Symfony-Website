@@ -13,10 +13,11 @@
        <div class="position-fixed top-0 start-50 translate-middle-x " style="z-index: 1030;">
     <ul class="nav nav-pills rounded-pill p-3 justify-content-center" style="background-color: rgb(46, 48, 51);">
         <li class="nav-item">
-            <a class="nav-link text-white active" style="background-color: rgba(255, 255, 255, 0.15)" href="#">Home</a>
+            <a class="nav-link text-white active" style="background-color: rgba(255, 255, 255, 0.15)" href="{{ path('app_home') }}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-white" href="#">Products</a>
+          <a class="nav-link text-white" href="{{ path('app_products') }}">Products</a>
+
         </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="#">Pages</a>
@@ -34,7 +35,7 @@
 
 <div>
     <!-- Button with Arrow and Circle -->
-    <a href="purchase.html" class="btn text-white d-flex align-items-center " style="background-color: rgb(46 48 51)">
+    <a href="{{ path('app_products') }}" class="btn text-white d-flex align-items-center " style="background-color: rgb(46 48 51)">
         <span>Purchase Now</span>
         <!-- Arrow Circle -->
         <span class="arrow-circle d-flex justify-content-center align-items-center ms-2">

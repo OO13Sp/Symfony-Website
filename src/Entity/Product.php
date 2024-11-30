@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,26 +17,36 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $descrition = null;
-
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
-    private ?string $Price = null;
+    private ?string $Name = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $image_url = null;
+    private ?string $description = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $price = null;
 
     #[ORM\Column]
-    private ?int $stock_quantity = null;
+    private ?int $stock = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $Collection = null;
+    private ?string $imgURL = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Products')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $Category = null;
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'Product_Type')]
+    private Collection $Categories;
+
+    #[ORM\ManyToOne(inversedBy: 'Products_Order')]
+    private ?Order $Product_Orders = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Product_Sale')]
+    private ?Sale $Product_Sales = null;
+
+    public function __construct()
+    {
+        $this->Categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -43,84 +55,111 @@ class Product
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->Name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $Name): static
     {
-        $this->name = $name;
+        $this->Name = $Name;
 
         return $this;
     }
 
-    public function getDescrition(): ?string
+    public function getDescription(): ?string
     {
-        return $this->descrition;
+        return $this->description;
     }
 
-    public function setDescrition(string $descrition): static
+    public function setDescription(string $description): static
     {
-        $this->descrition = $descrition;
+        $this->description = $description;
 
         return $this;
     }
 
     public function getPrice(): ?string
     {
-        return $this->Price;
+        return $this->price;
     }
 
-    public function setPrice(string $Price): static
+    public function setPrice(string $price): static
     {
-        $this->Price = $Price;
+        $this->price = $price;
 
         return $this;
     }
 
-    public function getImageUrl(): ?string
+    public function getStock(): ?int
     {
-        return $this->image_url;
+        return $this->stock;
     }
 
-    public function setImageUrl(string $image_url): static
+    public function setStock(int $stock): static
     {
-        $this->image_url = $image_url;
+        $this->stock = $stock;
 
         return $this;
     }
 
-    public function getStockQuantity(): ?int
+    public function getImgURL(): ?string
     {
-        return $this->stock_quantity;
+        return $this->imgURL;
     }
 
-    public function setStockQuantity(int $stock_quantity): static
+    public function setImgURL(?string $imgURL): static
     {
-        $this->stock_quantity = $stock_quantity;
+        $this->imgURL = $imgURL;
 
         return $this;
     }
 
-    public function getCollection(): ?string
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->Collection;
+        return $this->Categories;
     }
 
-    public function setCollection(?string $Collection): static
+    public function addCategory(Category $category): static
     {
-        $this->Collection = $Collection;
+        if (!$this->Categories->contains($category)) {
+            $this->Categories->add($category);
+            $category->addProductType($this);
+        }
 
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function removeCategory(Category $category): static
     {
-        return $this->Category;
+        if ($this->Categories->removeElement($category)) {
+            $category->removeProductType($this);
+        }
+
+        return $this;
     }
 
-    public function setCategory(?Category $Category): static
+    public function getProductOrders(): ?Order
     {
-        $this->Category = $Category;
+        return $this->Product_Orders;
+    }
+
+    public function setProductOrders(?Order $Product_Orders): static
+    {
+        $this->Product_Orders = $Product_Orders;
+
+        return $this;
+    }
+
+    public function getProductSales(): ?Sale
+    {
+        return $this->Product_Sales;
+    }
+
+    public function setProductSales(?Sale $Product_Sales): static
+    {
+        $this->Product_Sales = $Product_Sales;
 
         return $this;
     }
