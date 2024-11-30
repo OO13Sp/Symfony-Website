@@ -12,76 +12,113 @@
 
     <style>
         body {
-            background-color: #1c1c1c; /* Page background */
-            color: #fff; /* Text color for contrast */
+            background-color: #1c1c1c;
+            color: #fff;
         }
 
         .filters-section {
-            background-color: #1c1c1c; /* Filter section background */
+            background-color: #1c1c1c;
             color: #fff;
             padding: 20px;
             border-radius: 10px;
         }
 
-        /* Ensuring the gap between cards is applied */
-.row.g-4 {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;  /* Decreased gap to fit the smaller cards */
-}
+        .row.g-4 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
 
-/* Adjusting card size and spacing */
-.product-card {
-    background-color: #2d2d2d; /* Card background color */
-    color: #fff;
-    border-radius: 15px;
-    padding: 10px;  /* Reduced padding to make cards smaller */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: auto; /* Adjust height dynamically */
-}
+        .product-card {
+            background-color: #2d2d2d;
+            color: #fff;
+            border-radius: 15px;
+            padding: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: auto;
+        }
 
-/* Hover effect */
-.product-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
-}
-.cart-icon {
-    font-size: 2rem;  /* Adjust the size as needed */
-}
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+        }
 
+        .cart-icon {
+            font-size: 2rem;
+        }
 
-/* Card image styling */
-.card-img-top {
-    border-radius: 10px;
-    height: 150px;  /* Limit image size to make the card smaller */
-    object-fit: cover;  /* Ensure the image covers the space without distortion */
-}
+        .card-img-top {
+            border-radius: 10px;
+            height: 150px;
+            object-fit: cover;
+        }
 
-/* Ensuring card text looks appropriate */
-.card-body {
-    padding: 10px;
-}
+        .card-body {
+            padding: 10px;
+        }
 
-.card-title {
-    font-size: 1rem;  /* Reduce title font size */
-}
+        .card-title {
+            font-size: 1rem;
+        }
 
-.card-text {
-    font-size: 0.85rem;  /* Reduce description text font size */
-}
+        .card-text {
+            font-size: 0.85rem;
+        }
 
-/* Optional: Make the layout responsive */
-@media (max-width: 768px) {
-    .col-md-3 {
-        flex: 1 1 calc(50% - 10px); /* Adjust layout for tablets */
-    }
-}
+        /* Sidebar styling */
+        #cartSidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: #333;
+            color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+        }
 
-@media (max-width: 576px) {
-    .col-md-3 {
-        flex: 1 1 100%; /* Cards take full width on mobile */
-    }
-}
+        #cartSidebar .close-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        #cartSidebar .cart-content {
+            margin-top: 50px;
+            padding: 10px;
+        }
+
+        #cartSidebar .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        #cartSidebar .total-price {
+            padding-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Sidebar Open Effect */
+        #cartSidebar.open {
+            right: 0;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-3 {
+                flex: 1 1 calc(50% - 10px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .col-md-3 {
+                flex: 1 1 100%;
+            }
+        }
+
         .btn-primary:hover {
             background-color: #0056b3;
             border-color: #0056b3;
@@ -103,24 +140,21 @@
             </div>
             <div class="position-fixed top-0 start-50 translate-middle-x" style="z-index: 1030;">
                 <ul class="nav nav-pills rounded-pill p-3 justify-content-center" style="background-color: rgb(46, 48, 51);">
-                    <li class="nav-item"><a class="nav-link text-white active" style="background-color: rgba(255, 255, 255, 0.15)" href="{{ path('app_home') }}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white active" href="{{ path('app_home') }}">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="{{ path('app_products') }}">Products</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Pages</a></li>
                     <li class="nav-item"><a class="nav-link text-white" href="#">Contact Us</a></li>
                 </ul>
             </div>
 
-          <div style="position: relative; display: inline-block;">
-    <i class="bi bi-cart" style="font-size: 2rem;">
-        <span id="cart-badge" class="badge bg-danger" style="position: absolute; top: -10px; right: -10px; font-size: 0.8rem; padding: 0.2rem 0.5rem;">0</span>
-    </i> 
-</div>
-
+            <!-- Cart Icon with Badge -->
+            <div style="position: relative; display: inline-block;">
+                <i class="bi bi-cart" style="font-size: 2rem; cursor: pointer;" id="cartIcon">
+                    <span id="cart-badge" class="badge bg-danger" style="position: absolute; top: -10px; right: -10px; font-size: 0.8rem; padding: 0.2rem 0.5rem;">0</span>
+                </i>
+            </div>
 
         </nav>
-        <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
-            <h1 class="display-3 font-weight-bold">All Products</h1>
-        </div>
     </header>
 
     <!-- Main Body -->
@@ -152,28 +186,40 @@
 
             <!-- Product Cards -->
             <div class="col-md-9">
-    <div class="row g-4" id="product-list">
-        {% for product in products %}
-            <div class="col-md-3 mb-4 product-card" 
-     data-category="{{ product.categories|join(', ') }}" 
-     data-price="{{ product.price }}">
-    <div class="card">
-        <img src="{{ product.imgURL }}" class="card-img-top" alt="{{ product.name }}">
-        <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>
-            <p class="card-text">Price: ${{ product.price }}</p>
-            <p class="card-text">Category: {{ product.categories|join(', ') }}</p>
-            <button class="btn btn-sm btn-primary add-to-cart">Add to Cart</button> <!-- Add to Cart button -->
-        </div>
-    </div>
-</div>
-        {% endfor %}
-    </div>
-</div>
+                <div class="row g-4" id="product-list">
+                    {% for product in products %}
+                        <div class="col-md-3 mb-4 product-card" 
+                             data-category="{{ product.categories|join(', ') }}" 
+                             data-price="{{ product.price }}">
+                            <div class="card">
+                                <img src="{{ product.imgURL }}" class="card-img-top" alt="{{ product.name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.description }}</p>
+                                    <p class="card-text">Price: ${{ product.price }}</p>
+                                    <p class="card-text">Category: {{ product.categories|join(', ') }}</p>
+                                    <button class="btn btn-sm btn-primary add-to-cart" data-name="{{ product.name }}" data-price="{{ product.price }}">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
 
         </div>
     </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar">
+        <span class="close-btn" id="closeSidebar">&times;</span>
+        <div class="cart-content">
+            <h5>Your Cart</h5>
+            <div id="cartItems"></div>
+            <div class="total-price">
+                <p>Total: $<span id="totalPrice">0</span></p>
+            </div>
+        </div>
+    </div>
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -185,10 +231,12 @@
             const applyFiltersButton = document.querySelector('#applyFilters');
             const productList = document.querySelectorAll('.product-card');
 
+            // Price filter display
             priceFilter.addEventListener('input', () => {
                 priceValue.textContent = priceFilter.value;
             });
 
+            // Apply filters logic
             applyFiltersButton.addEventListener('click', () => {
                 const selectedCategory = categoryFilter.value.toLowerCase();
                 const maxPrice = parseFloat(priceFilter.value);
@@ -207,32 +255,53 @@
                     }
                 });
             });
+
+            // Cart logic
+            const cartBadge = document.getElementById('cart-badge');
+            let cart = [];
+            const cartIcon = document.getElementById('cartIcon');
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalPriceElem = document.getElementById('totalPrice');
+
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', () => {
+                    const productName = button.getAttribute('data-name');
+                    const productPrice = parseFloat(button.getAttribute('data-price'));
+                    cart.push({ name: productName, price: productPrice });
+                    updateCart();
+                    cartSidebar.classList.add('open'); // Open cart sidebar when item is added
+                  
+                });
+            });
+
+            // Update the cart UI
+            function updateCart() {
+                cartItemsContainer.innerHTML = '';
+                let totalPrice = 0;
+                cart.forEach(item => {
+                    const cartItemElem = document.createElement('div');
+                    cartItemElem.classList.add('cart-item');
+                    cartItemElem.innerHTML = `
+                        <span>${item.name}</span>
+                        <span>$${item.price}</span>
+                    `;
+                    cartItemsContainer.appendChild(cartItemElem);
+                    totalPrice += item.price;
+                });
+
+                totalPriceElem.textContent = totalPrice.toFixed(2);
+                cartBadge.textContent = cart.length;
+            }
+cartIcon.addEventListener('click', () => {
+                cartSidebar.classList.add('open');
+            });
+
+            // Close the cart sidebar
+            document.getElementById('closeSidebar').addEventListener('click', () => {
+                cartSidebar.classList.remove('open');
+            });
         });
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-    // Select all add to cart buttons
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    // Select the cart badge
-    const cartBadge = document.getElementById('cart-badge');
-
-    // Initialize cart count
-    let cartCount = parseInt(cartBadge.textContent) || 0;
-
-    // Update badge count
-    function updateCartBadge() {
-        cartBadge.textContent = cartCount;
-    }
-
-    // Add event listener to each "Add to Cart" button
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            cartCount++; // Increment the cart count
-            updateCartBadge(); // Update the badge with the new count
-        });
-    });
-});
-
     </script>
 </body>
 </html>
