@@ -1,0 +1,20 @@
+<div class="filters-section">
+    <h5>Filters</h5>
+    <form id="filters-form">
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select id="category" class="form-select bg-black text-white">
+                <option value="all">All</option>
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="priceRange" class="form-label">Price Range</label>
+            <input type="range" class="form-range" id="priceRange" min="0" max="1000" step="50">
+            <span id="priceValue">500</span>
+        </div>
+        <button type="button" class="btn btn-primary w-100" id="applyFilters">Apply Filters</button>
+    </form>
+</div>

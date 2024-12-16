@@ -1,0 +1,19 @@
+<div class="row g-4" id="product-list">
+    {% for product in products %}
+        <div class="col-md-3 mb-4 product-card" 
+             data-category="{{ product.categories|join(', ') }}" 
+             data-price="{{ product.price }}"
+             data-id="{{ product.id }}">
+            <div class="card">
+                <img src="{{ product.imgURL }}" class="card-img-top" alt="{{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text">Price: ${{ product.price }}</p>
+                    <p class="card-text">Category: {{ product.categories|join(', ') }}</p>
+                    <button class="btn btn-sm btn-primary add-to-cart" data-id="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

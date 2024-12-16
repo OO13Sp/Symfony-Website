@@ -3,17 +3,66 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+<style>
+    /* Full-page background */
+    body {
+        background-image: url('/path/to/your/background.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+    }
+
+    /* Form container styling */
+    .register-container {
+        background: rgba(255, 255, 255, 0.9); /* White background with slight transparency */
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .register-container h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .register-container .btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="register-container">
     <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
+    <!-- Display errors -->
+    {% if form_errors(registrationForm) %}
+        <div class="alert alert-danger">
+            {{ form_errors(registrationForm) }}
+        </div>
+    {% endif %}
 
+    <!-- Start the form -->
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
+        {{ form_row(registrationForm.username, {
+            attr: { class: 'form-control' }
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password',
+            attr: { class: 'form-control' }
+        }) }}
+        {{ form_row(registrationForm.agreeTerms, {
+            attr: { class: 'form-check-input' }
+        }) }}
 
-        <button type="submit" class="btn">Register</button>
+        <button type="submit" class="btn btn-primary btn-lg mt-3">Register</button>
     {{ form_end(registrationForm) }}
+</div>
 {% endblock %}

@@ -1,0 +1,16 @@
+<div id="cartSidebar">
+    <span class="close-btn" id="closeSidebar">&times;</span>
+    <div class="cart-content">
+        <h5>Your Cart</h5>
+        <div id="cartItems">
+            {% for item in cart %}
+                <div class="cart-item">
+                    <p>{{ item.productName }} x {{ item.quantity }} - ${{ item.price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="total-price">
+            <p>Total: $<span id="totalPrice">{{ totalCartPrice }}</span></p>
+        </div>
+    </div>
+</div>

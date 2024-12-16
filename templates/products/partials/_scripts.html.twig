@@ -1,0 +1,107 @@
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const categoryFilter = document.querySelector('#category');
+        const priceFilter = document.querySelector('#priceRange');
+        const priceValue = document.querySelector('#priceValue');
+        const applyFiltersButton = document.querySelector('#applyFilters');
+        const productList = document.querySelectorAll('.product-card');
+
+        // Price filter display
+        priceFilter.addEventListener('input', () => {
+            priceValue.textContent = priceFilter.value;
+        });
+
+        // Apply filters logic
+        applyFiltersButton.addEventListener('click', () => {
+            const selectedCategory = categoryFilter.value.toLowerCase();
+            const maxPrice = parseFloat(priceFilter.value);
+
+            productList.forEach(product => {
+                const productCategory = product.getAttribute('data-category').toLowerCase();
+                const productPrice = parseFloat(product.getAttribute('data-price'));
+
+                if (
+                    (selectedCategory === 'all' || productCategory.includes(selectedCategory)) &&
+                    productPrice <= maxPrice
+                ) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+
+        // Cart logic
+        const cartBadge = document.getElementById('cart-badge');
+        let cart = [];
+        const cartIcon = document.getElementById('cartIcon');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const totalPriceElem = document.getElementById('totalPrice');
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', () => {
+                const productId = button.getAttribute('data-id');
+                const productName = button.getAttribute('data-name');
+                const productPrice = parseFloat(button.getAttribute('data-price'));
+                const quantity = 1; // Default quantity of 1
+
+                // Make the POST request to add the product to the cart
+                const formData = new FormData();
+                formData.append('productId', productId);
+                formData.append('quantity', quantity);
+                formData.append('action', 'add-to-cart');
+
+                fetch('/products', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        cart.push({ name: productName, price: productPrice });
+                        updateCart();
+                        cartSidebar.classList.add('open');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding the product to the cart.');
+                });
+            });
+        });
+
+        // Update the cart UI
+        function updateCart() {
+            cartItemsContainer.innerHTML = '';
+            let totalPrice = 0;
+            cart.forEach(item => {
+                const cartItemElem = document.createElement('div');
+                cartItemElem.classList.add('cart-item');
+                cartItemElem.innerHTML = `
+                    <span>${item.name}</span>
+                    <span>$${item.price}</span>
+                `;
+                cartItemsContainer.appendChild(cartItemElem);
+                totalPrice += item.price;
+            });
+
+            totalPriceElem.textContent = totalPrice.toFixed(2);
+            cartBadge.textContent = cart.length;
+        }
+
+        cartIcon.addEventListener('click', () => {
+            cartSidebar.classList.add('open');
+        });
+
+        // Close the cart sidebar
+        document.getElementById('closeSidebar').addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+        });
+    });
+</script>

@@ -1,192 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products Page</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome (optional for icons) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('style.css') }}">
-    <style>
-       
-    </style>
-</head>
-<body>
-    <!-- Navbar Section -->
-    <header class="position-relative" style="background-image: url('https://images.pexels.com/photos/276528/pexels-photo-276528.jpeg?cs=srgb&dl=pexels-pixabay-276528.jpg&fm=jpg'); background-size: cover; height: 50vh;">
-        <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark opacity-50"></div>
-        <nav class="navbar navbar-dark container-fluid px-4 pt-3">
-            <div class="d-flex align-items-center">
-                <img src="/Logo.png" alt="Furniture Mania Logo" style="height: 80px; margin-right: 10px;">
-                <h1 class="navbar-brand mb-0"></h1>
-            </div>
-            <div class="position-fixed top-0 start-50 translate-middle-x" style="z-index: 1030;">
-                <ul class="nav nav-pills rounded-pill p-3 justify-content-center" style="background-color: rgb(46, 48, 51);">
-                    <li class="nav-item"><a class="nav-link text-white active" href="{{ path('app_home') }}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="{{ path('app_products') }}">Products</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Pages</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="#">Contact Us</a></li>
-                </ul>
-            </div>
+ 
+{% extends 'base.html.twig' %}
 
-            <!-- Cart Icon with Badge -->
-            <div style="position: relative; display: inline-block;">
-                <i class="bi bi-cart" style="font-size: 2rem; cursor: pointer;" id="cartIcon">
-                    <span id="cart-badge" class="badge bg-danger" style="position: absolute; top: -10px; right: -10px; font-size: 0.8rem; padding: 0.2rem 0.5rem;">0</span>
-                </i>
-            </div>
+{% block title %}Products Page{% endblock %}
 
-        </nav>
-    </header>
+{% block head %}
+    {% include 'products/partials/head.html.twig' %}
+{% endblock %}
 
-    <!-- Main Body -->
+{% block body %}
+    {% include 'products/partials/_navbar.html.twig' %}
     <main class="container my-5">
         <div class="row">
             <!-- Filters Section -->
             <div class="col-md-3">
-                <div class="filters-section">
-                    <h5>Filters</h5>
-                    <form id="filters-form">
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Category</label>
-                            <select id="category" class="form-select bg-black text-white">
-                                <option value="all">All</option>
-                                {% for category in categories %}
-                                    <option value="{{ category }}">{{ category }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="priceRange" class="form-label">Price Range</label>
-                            <input type="range" class="form-range" id="priceRange" min="0" max="1000" step="50">
-                            <span id="priceValue">500</span>
-                        </div>
-                        <button type="button" class="btn btn-primary w-100" id="applyFilters">Apply Filters</button>
-                    </form>
-                </div>
+                {% include 'products/partials/_filters.html.twig' %}
             </div>
-
             <!-- Product Cards -->
             <div class="col-md-9">
-                <div class="row g-4" id="product-list">
-                    {% for product in products %}
-                        <div class="col-md-3 mb-4 product-card" 
-                             data-category="{{ product.categories|join(', ') }}" 
-                             data-price="{{ product.price }}">
-                            <div class="card">
-                                <img src="{{ product.imgURL }}" class="card-img-top" alt="{{ product.name }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ product.name }}</h5>
-                                    <p class="card-text">{{ product.description }}</p>
-                                    <p class="card-text">Price: ${{ product.price }}</p>
-                                    <p class="card-text">Category: {{ product.categories|join(', ') }}</p>
-                                    <button class="btn btn-sm btn-primary add-to-cart" data-name="{{ product.name }}" data-price="{{ product.price }}">Add to Cart</button>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                {% include 'products/partials/_product_cards.html.twig' %}
             </div>
-
         </div>
     </main>
+    {% include 'products/partials/cart_sidebar.html.twig' %}
+        {% include 'products/partials/_scripts.html.twig' %}
+{% endblock %}
 
-    <!-- Cart Sidebar -->
-    <div id="cartSidebar">
-        <span class="close-btn" id="closeSidebar">&times;</span>
-        <div class="cart-content">
-            <h5>Your Cart</h5>
-            <div id="cartItems"></div>
-            <div class="total-price">
-                <p>Total: $<span id="totalPrice">0</span></p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const categoryFilter = document.querySelector('#category');
-            const priceFilter = document.querySelector('#priceRange');
-            const priceValue = document.querySelector('#priceValue');
-            const applyFiltersButton = document.querySelector('#applyFilters');
-            const productList = document.querySelectorAll('.product-card');
-
-            // Price filter display
-            priceFilter.addEventListener('input', () => {
-                priceValue.textContent = priceFilter.value;
-            });
-
-            // Apply filters logic
-            applyFiltersButton.addEventListener('click', () => {
-                const selectedCategory = categoryFilter.value.toLowerCase();
-                const maxPrice = parseFloat(priceFilter.value);
-
-                productList.forEach(product => {
-                    const productCategory = product.getAttribute('data-category').toLowerCase();
-                    const productPrice = parseFloat(product.getAttribute('data-price'));
-
-                    if (
-                        (selectedCategory === 'all' || productCategory.includes(selectedCategory)) &&
-                        productPrice <= maxPrice
-                    ) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
-                });
-            });
-
-            // Cart logic
-            const cartBadge = document.getElementById('cart-badge');
-            let cart = [];
-            const cartIcon = document.getElementById('cartIcon');
-            const cartSidebar = document.getElementById('cartSidebar');
-            const cartItemsContainer = document.getElementById('cartItems');
-            const totalPriceElem = document.getElementById('totalPrice');
-
-            document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', () => {
-                    const productName = button.getAttribute('data-name');
-                    const productPrice = parseFloat(button.getAttribute('data-price'));
-                    cart.push({ name: productName, price: productPrice });
-                    updateCart();
-                    cartSidebar.classList.add('open'); // Open cart sidebar when item is added
-                  
-                });
-            });
-
-            // Update the cart UI
-            function updateCart() {
-                cartItemsContainer.innerHTML = '';
-                let totalPrice = 0;
-                cart.forEach(item => {
-                    const cartItemElem = document.createElement('div');
-                    cartItemElem.classList.add('cart-item');
-                    cartItemElem.innerHTML = `
-                        <span>${item.name}</span>
-                        <span>$${item.price}</span>
-                    `;
-                    cartItemsContainer.appendChild(cartItemElem);
-                    totalPrice += item.price;
-                });
-
-                totalPriceElem.textContent = totalPrice.toFixed(2);
-                cartBadge.textContent = cart.length;
-            }
-             cartIcon.addEventListener('click', () => {
-                cartSidebar.classList.add('open');
-            });
-
-            // Close the cart sidebar
-            document.getElementById('closeSidebar').addEventListener('click', () => {
-                cartSidebar.classList.remove('open');
-            });
-        });
-    </script>
-</body>
-</html>
+{% block javascripts %}
+    {% include 'products/partials/_scripts.html.twig' %}
+{% endblock %}
